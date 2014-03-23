@@ -612,7 +612,7 @@ int main(int argc, char *argv[])
 
     rc = EXIT_FAILURE; /* until clean exit */
     
-    if (osc_start((struct deck *)&deck) == -1)
+    if (osc_start((struct deck *)&deck, &library) == -1)
         return -1;
     osc_start_updater_thread();
 

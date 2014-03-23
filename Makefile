@@ -40,7 +40,7 @@ DOCDIR ?= $(PREFIX)/share/doc
 
 # Build flags
 
-CFLAGS ?= -O3
+CFLAGS ?= -g -O3
 CFLAGS += -Wall
 CPPFLAGS += -MMD
 LDFLAGS ?= -O3
@@ -133,6 +133,11 @@ xwax.o:		.version
 
 mktimecode:	mktimecode.o
 mktimecode:	LDLIBS  += -lm
+
+# Client
+
+xwax-client:	xwax-client.o
+xwax-client: LDLIBS += $(LIBLO_LIBS)
 
 # Install to system
 
