@@ -51,7 +51,7 @@ struct deck {
     struct controller *control[4];
 };
 
-int deck_init(struct deck *deck, struct rt *rt);
+int deck_init(struct deck *deck, struct rt *rt, size_t ndeck);
 void deck_clear(struct deck *deck);
 
 bool deck_is_locked(const struct deck *deck);

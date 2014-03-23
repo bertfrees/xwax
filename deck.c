@@ -44,7 +44,7 @@ static const struct record no_record = {
  * Pre: deck->device, deck->timecoder, deck->importer are valid
  */
 
-int deck_init(struct deck *deck, struct rt *rt)
+int deck_init(struct deck *deck, struct rt *rt, size_t ncontrol)
 {
     unsigned int rate;
 
@@ -53,7 +53,7 @@ int deck_init(struct deck *deck, struct rt *rt)
     if (rt_add_device(rt, &deck->device) == -1)
         return -1;
 
-    deck->ncontrol = 0;
+    deck->ncontrol = ncontrol;
     deck->record = &no_record;
     deck->punch = NO_PUNCH;
     rate = device_sample_rate(&deck->device);

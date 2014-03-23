@@ -27,6 +27,7 @@ SDL_CFLAGS ?= `sdl-config --cflags`
 SDL_LIBS ?= `sdl-config --libs` -lSDL_ttf
 ALSA_LIBS ?= -lasound
 JACK_LIBS ?= -ljack
+LIBLO_LIBS ?= -llo
 
 # Installation paths
 
@@ -46,7 +47,8 @@ LDFLAGS ?= -O3
 
 # Core objects and libraries
 
-OBJS = controller.o \
+OBJS = osc.o \
+	controller.o \
 	cues.o \
 	deck.o \
 	device.o \
@@ -116,7 +118,7 @@ VERSION = $(shell ./mkversion)
 # Main binary
 
 xwax:		$(OBJS)
-xwax:		LDLIBS += $(SDL_LIBS) $(DEVICE_LIBS) -lm
+xwax:		LDLIBS += $(SDL_LIBS) $(DEVICE_LIBS) $(LIBLO_LIBS) -lm
 xwax:		LDFLAGS += -pthread
 
 interface.o:	CFLAGS += $(SDL_CFLAGS)
@@ -183,6 +185,7 @@ tests/ttf:	LDLIBS += $(SDL_LIBS)
 .PHONY:		clean
 clean:
 		rm -f xwax \
+			xwax-client xwax-client.o \
 			$(OBJS) $(DEPS) \
 			$(TESTS) $(TEST_OBJS) \
 			TAGS
