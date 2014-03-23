@@ -40,6 +40,7 @@
 #include "selector.h"
 #include "status.h"
 #include "timecoder.h"
+#include "osc.h"
 #include "xwax.h"
 
 /* Screen refresh time in milliseconds */
@@ -1481,6 +1482,8 @@ static bool handle_key(SDLKey key, SDLMod mod)
 
         if (meter_scale < 0)
             meter_scale = 0;
+            
+        osc_send_scale(meter_scale);            
 
         fprintf(stderr, "Meter scale decreased to %d\n", meter_scale);
 
@@ -1489,6 +1492,8 @@ static bool handle_key(SDLKey key, SDLMod mod)
 
         if (meter_scale > MAX_METER_SCALE)
             meter_scale = MAX_METER_SCALE;
+            
+        osc_send_scale(meter_scale);
 
         fprintf(stderr, "Meter scale increased to %d\n", meter_scale);
 
@@ -1523,8 +1528,10 @@ static bool handle_key(SDLKey key, SDLMod mod)
             } else switch(func) {
             case FUNC_LOAD:
                 re = selector_current(sel);
-                if (re != NULL)
+                if (re != NULL) {
                     deck_load(de, re);
+                    osc_send_track_load(de);
+                }
                 break;
 
             case FUNC_RECUE:

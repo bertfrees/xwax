@@ -41,6 +41,7 @@
 #include "rig.h"
 #include "timecoder.h"
 #include "track.h"
+#include "osc.h"
 #include "xwax.h"
 
 #define DEFAULT_OSS_BUFFERS 8
@@ -167,7 +168,7 @@ static int commit_deck(void)
 
     d = &deck[ndeck];
 
-    r = deck_init(d, &rt, timecode, importer, speed, phono, protect);
+    r = deck_init(d, &rt, timecode, importer, speed, phono, protect, ndeck);
     if (r == -1)
         return -1;
 
@@ -175,6 +176,10 @@ static int commit_deck(void)
 
     for (n = 0; n < nctl; n++)
         controller_add_deck(&ctl[n], d);
+
+    /* Connect this deck to OSC server */
+
+    osc_add_deck();
 
     ndeck++;
 
@@ -606,6 +611,10 @@ int main(int argc, char *argv[])
     }
 
     rc = EXIT_FAILURE; /* until clean exit */
+    
+    if (osc_start((struct deck *)&deck) == -1)
+        return -1;
+    osc_start_updater_thread();
 
     /* Order is important: launch realtime thread first, then mlock.
      * Don't mlock the interface, use sparingly for audio threads */
@@ -642,6 +651,7 @@ out_rt:
     library_clear(&library);
     rt_clear(&rt);
     rig_clear();
+    osc_stop();
     library_global_clear();
     thread_global_clear();
 
