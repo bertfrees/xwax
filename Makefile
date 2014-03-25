@@ -144,6 +144,7 @@ xwax-client: LDLIBS += $(LIBLO_LIBS)
 .PHONY:		install
 install:
 		$(INSTALL) -D xwax $(DESTDIR)$(BINDIR)/xwax
+		$(INSTALL) -D xwax-client $(DESTDIR)$(BINDIR)/xwax-client
 		$(INSTALL) -D scan $(DESTDIR)$(EXECDIR)/xwax-scan
 		$(INSTALL) -D bpm-scan $(DESTDIR)$(EXECDIR)/xwax-bpm-scan
 		$(INSTALL) -D import $(DESTDIR)$(EXECDIR)/xwax-import
