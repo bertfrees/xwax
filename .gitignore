@@ -1,6 +1,7 @@
 TAGS
 xwax
 mktimecode
+xwax-client
 *.o
 *.d
 .config
