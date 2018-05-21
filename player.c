@@ -196,7 +196,7 @@ void player_set_timecoder(struct player *pl, struct timecoder *tc)
  * Post: player is initialised
  */
 
-void player_init(struct player *pl, unsigned int sample_rate,
+void player_init(struct player *pl,struct deck *deck, unsigned int sample_rate,
                  struct track *track, struct timecoder *tc)
 {
     assert(track != NULL);
@@ -216,6 +216,14 @@ void player_init(struct player *pl, unsigned int sample_rate,
     pl->pitch = 0.0;
     pl->sync_pitch = 1.0;
     pl->volume = 0.0;
+
+    pl->deck = deck;
+
+    pl->currentPitchSample = 0;
+    pl->pitchSampleAmount = 160;
+    int i;
+    for(i = 0; i < pl->pitchSampleAmount; i++)
+        pl->pitchSamples[i] = -1.0;
 }
 
 /*
@@ -348,6 +356,7 @@ static int sync_to_timecode(struct player *pl)
     signed int timecode;
 
     timecode = timecoder_get_position(pl->timecoder, &when);
+
 
     /* Instruct the caller to disconnect the timecoder if the needle
      * is outside the 'safe' zone of the record */
@@ -483,4 +492,27 @@ void player_collect(struct player *pl, signed short *pcm, unsigned samples)
 
     pl->position += r;
     pl->volume = target_volume;
+}
+
+// sample to achieve smoother bpm calculation according to pitch speed
+
+/*int i;
+for (i = 0; i < pitchSampleAmount, i++) {
+    pitchSamplesA[i] = -1.0;
+}*/
+double player_getAveragePitch(struct player *pl){
+    double sum = 0;
+    // in case the sample array isnt full yet
+    double amount = 0;
+    int i;
+    int j = pl->pitchSampleAmount;
+    for ( i = 0; i < j; i++)
+    {
+        if ( pl->pitchSamples[i] != -1.0 )
+        {
+            amount = amount + 1.0;
+            sum += pl->pitchSamples[i];
+        }
+    }
+    return sum/amount;
 }
