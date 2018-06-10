@@ -15,11 +15,6 @@ RATE="$2"
 
 case "$FILE" in
 
-*.cdaudio)
-	echo "Calling CD extract..." >&2
-	exec cdparanoia -r `cat "$FILE"` -
-	;;
-
 *.mp3)
 	echo "Calling MP3 decoder..." >&2
 	exec mpg123 -q -s --rate "$RATE" --stereo "$FILE"
