@@ -106,7 +106,7 @@ DEPS = $(OBJS:.o=.d) $(TEST_OBJS:.o=.d) mktimecode.d
 # Rules
 
 .PHONY:		all
-all:		xwax mktimecode tests
+all:		xwax mktimecode xwax-client tests
 
 # Dynamic versioning
 
